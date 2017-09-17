@@ -1,0 +1,32 @@
+.video-view {
+
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    @mixin atMedium {
+        flex-direction: row;
+        justify-content: flex-start;
+        padding-top: 2rem;
+        overflow: hidden;
+    }
+
+    &__other-videos {
+        
+        @mixin atMedium {
+            flex-basis: 33.3%;
+            margin-right: -25px;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        .heading {
+            padding: 0 2rem;
+            font-size: 1.65rem;
+
+            @mixin isSmall {
+                text-align: center;
+            }
+        }
+    }
+}

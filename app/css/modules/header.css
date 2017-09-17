@@ -1,0 +1,43 @@
+.header {
+    display: flex;
+    justify-content: center;
+
+
+    position: fixed;
+    width: 100%;
+    padding: 1rem;
+    background: $background;
+    border-bottom: 1px solid color($background b(+ 35));
+    box-shadow: 0 2px 1px 2px color(black a(0.35));
+
+    $b-shadow: 3px 2px 1px 1px color(black a(0.5));
+
+    &__search {
+        box-shadow: $b-shadow;
+        border: none;
+        min-width: 220px;
+        max-width: 100%;
+        padding: 2px 10px;
+        font-size: 1.65rem;
+        font-weight: 300;
+
+        @mixin isSmall {
+            font-size: 1.25rem;
+        }
+    }
+
+    &__submit-button {
+        box-shadow: $b-shadow;
+        background: $color;
+        color: $background;
+        border: none;
+        padding: 0 0.65rem;
+
+        &:hover {
+            background: color($color b(+ 5));
+        }
+        &:active {
+            background: color($color b(+ 10));
+        }
+    }
+}

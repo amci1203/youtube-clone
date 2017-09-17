@@ -1,0 +1,51 @@
+.current-video {
+    $b-radius: 0 0 2rem 2rem;
+
+    flex-basis: 66.66%;
+    box-shadow: 0 3px 2px 3px color(black a(0.5));
+    border-radius: $b-radius;
+    flex-grow: 0;
+    
+
+    @mixin isSmall {
+        flex-basis: 100%;
+        position: relative;
+        left: -0.45rem;
+        width: 100vw;
+        margin-bottom: 1rem;
+        border-radius:0;
+    }
+
+    &__video {
+        width: 100%;
+        @mixin isSmall {
+            height: 100%;
+        }
+
+        &__iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    }
+
+    &__details {
+        background: #FFF;
+        color: #333;
+
+        padding: 0.65rem 2rem;
+        border-radius: $b-radius;
+
+        &__title {
+            font-weight: bold;
+            
+            @mixin isSmall {
+                text-align: center;
+            }
+        }
+
+        @mixin isSmall {
+            border-radius: 0;
+        }
+    }
+}

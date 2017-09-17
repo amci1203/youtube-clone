@@ -1,0 +1,41 @@
+{
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.1",
+    "express": "^4.15.4",
+    "fs-extra": "^4.0.2",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-evil-icons": "^0.4.0",
+    "react-redux": "^5.0.6",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
+    "redux": "^3.7.2",
+    "redux-saga": "^0.15.6",
+    "serve-static": "^1.12.4",
+    "youtube-api-search": "^0.0.5"
+  },
+  "devDependencies": {
+    "autoprefixer": "^7.1.4",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-lodash": "^3.2.11",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-es2017": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "browser-sync": "^2.18.13",
+    "connect-history-api-fallback": "^1.3.0",
+    "gulp": "^3.9.1",
+    "gulp-postcss": "^7.0.0",
+    "gulp-watch": "^4.3.11",
+    "jest": "^21.1.0",
+    "mocha": "^3.5.3",
+    "postcss-calc": "^6.0.0",
+    "postcss-color-function": "^4.0.0",
+    "precss": "^2.0.0",
+    "redux-logger": "^3.0.6",
+    "webpack": "^3.5.6"
+  }
+}

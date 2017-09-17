@@ -1,0 +1,140 @@
+.results {
+    width: 100%;
+    padding: 0 2rem;
+    margin: 0 auto;
+
+    &--placeholder {
+        font-weight: 100;
+        font-size: 1.5rem;
+        text-align: center;
+        align-self: center;
+    }
+
+    &--aside {
+        flex-basis: 33.33%;
+    }
+
+    @mixin isSmall {
+        flex-basis: 100% !important;
+        padding: 0;
+    }
+
+    &__list-item {
+        @mixin noTextDecoration;
+
+        display: block;
+        list-style-type: none;
+        margin: 1rem 0;
+        padding: 1rem;
+        border-radius: 0.65rem;
+        background: color($background b(+ 25));
+
+        &--aside {
+            padding: 0;
+            border: none;
+            background: transparent;
+            box-shadow: none;
+            border-radius: 0;
+            padding-bottom: 0.35rem;
+            border-bottom: 3px solid color($background b(+ 15));
+
+            .media__body {
+                color: #FFF !important;
+            }
+        }
+    }
+
+    .media {
+        display: flex;
+
+        &__thumbnail {
+            @mixin atMedium {
+                flex-basis: 33.33%;
+                padding: 0 1rem;
+                height: auto;
+            }
+            @mixin isSmall {
+                height: 180px;
+                width: 240px;
+                margin: 0 auto;
+                img {
+                    height: 100%;
+                    width: 100%;
+                }
+            }
+        }
+
+        &__body {
+            flex-basis: 66.66%;
+            color: #FFF;
+
+            &__title {
+                @mixin noTextDecoration;
+                font-size: 1.55rem;
+                @mixin isSmall {
+                    text-align: center;
+                    font-weight: 300;
+                    font-size: 1.4rem;
+                }
+            }
+
+            &__description {
+                @mixin isSmall {
+                    display: none;
+                }
+            }
+
+            &__save-button {
+                margin: 0;
+                align-self: flex-end;
+                text-align: right;
+
+                &:hover {
+                    cursor: default;
+                }
+
+                img {
+                    min-width: 15px;
+                    max-width: 20px;
+                    height: auto;
+                    &:hover {
+                        cursor: pointer;
+                    }
+                }
+
+                span {
+                    display: inline-block;
+                    padding-right: 10px;
+                    font-weight: 600;
+                }
+            }
+        }
+
+        @mixin isSmall {
+            flex-direction: column;
+            &__thumbnail {
+                padding: 0 0.15rem;
+            }
+        }
+    }
+
+
+    &__list-item--aside .media {
+        &__thumbnail {
+            flex-basis: 20%;
+            padding: 0.15rem;
+            padding-right: 1rem;
+        }
+        &__body {
+            flex-basis: 80%;
+            &__title {
+                @mixin atMedium {
+                    font-size: 1.1rem;
+                }
+            }
+            &__description {
+                display: none;
+            }
+        }
+    }
+}
