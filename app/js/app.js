@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { Route } from 'react-router'
 import { Provider } from 'react-redux'
 
+// All middlewares and such are handled at this path as well
 import store from './reducers/root.reducer'
 
 import Search from './components/search'

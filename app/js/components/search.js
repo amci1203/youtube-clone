@@ -1,43 +1,41 @@
-import React, { Component } from 'react';
-import { debounce } from 'lodash';
+import React, { Component } from 'react'
+import { debounce } from 'lodash'
 
-export default class Search extends Component {
+import connect from './helpers/connect'
+import request from '../actions/request.actions'
+
+class Search extends Component {
 
     constructor (props) {
-        super(props);
-        this.lastChanged = null;
+        super(props)
+        this.lastChanged = null
 
-        this.search = this.search.bind(this);
-        this.searchNow = this.searchNow.bind(this);
+        this.search = this.search.bind(this)
     }
 
     componentDidMount () {
-        this.debounced = debounce(this.search, 2000, { leading: false });
+        this.debounced = debounce(this.search, 2000, { leading: false })
         this.enterListener = e => {
             const
                 focused = document.activeElement.tagName,
-                { keyCode } = e;
-            if (focused.toLowerCase() == 'input' && keyCode == 13) this.searchNow();
+                { keyCode } = e
+            if (focused == 'INPUT' && keyCode == 13) this.search(true)
         }
 
-        window.addEventListener('keydown', this.enterListener);
+        window.addEventListener('keydown', this.enterListener)
     }
 
     componentWillUnmount () {
-        window.removeEventListener('keydown', this.enterListener);
+        window.removeEventListener('keydown', this.enterListener)
     }
 
-    searchNow () {
-        this.debounced.cancel;
-        this.search();
-    }
-
-    search () {
-        this.props.onSearch(this.input.value)
+    search (cancel = false) {
+        if (cancel) this.debounced.cancel
+        this.props.request('SEARCH', this.input.value)
     }
 
     render () {
-        const { searchNow,  debounced } = this
+        const { search, debounced } = this
         return (
             <div className='header'>
                 <input
@@ -49,7 +47,7 @@ export default class Search extends Component {
                 />
                 <button
                     className='header__submit-button'
-                    onClick={searchNow}
+                    onClick={search}
                     type='submit'
                 >SEARCH</button>
             </div>
@@ -57,3 +55,5 @@ export default class Search extends Component {
     }
 
 }
+
+export default connect(null, { request }, Search)

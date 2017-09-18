@@ -1,4 +1,4 @@
-import types from '..types'
+import types from '../types'
 
 export default (str, ...args) => {
     const type = str.toUpperCase() + '_REQUESTED'

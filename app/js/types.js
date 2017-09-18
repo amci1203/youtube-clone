@@ -6,7 +6,6 @@ const formActionTypes = str => {
         failure = base + '_FAILED'
 
     return {
-           [base]: base,
         [request]: request,
         [succeed]: succeed,
         [failure]: failure
