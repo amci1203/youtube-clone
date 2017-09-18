@@ -14,7 +14,7 @@ const LIST_KEY = 'saved_videos'
 export function* fetchVideos () {
     try {
         const 
-            videosIds = yield call(store, store.get, LIST_KEY),
+            videosIds = yield call(store.get, LIST_KEY),
             videos = videoIds.map(id => store.get(id))
 
         yield put({ type: types.FETCH_SAVES_SUCCEEDED, videos })
@@ -24,21 +24,33 @@ export function* fetchVideos () {
     }
 }
 
-export function* addVideo (video) {
+export function* toggleVideoSaveStatus (video) {
     try {
-        const list = yield store.get(LIST_KEY)
+    const
+        { id } = video,
+        saves = yield call(store.get, LIST_KEY)
 
-        yield call(store, store.set, LIST_KEY, list.concat([ video.id ]))
-        yield call(store, store.get, video.id, video)
-
-        yield put({ type: types.ADD_SAVE_SUCCEEDED, video })
-        
+        saves.indexOf(id) === -1
+        ? addVideo(saves, video)
+        : removeVideo(saves, id)
     } catch (e) {
-        yield put({ type: types.ADD_SAVE_FAILED, error: e.toString() })
+        yield put({ type: types.TOGGLE_SAVE_FAILED, error: e.toString() })
     }
 }
 
-export function* removeVideo (id) {
+function* addVideo (saves, video) {
+    try {
+        yield call(store.set, LIST_KEY, [...saves, video.id])
+        yield call(store.get, video.id, video)
+
+        yield put({ type: types.ADD_SAVE, video })
+        
+    } catch (e) {
+        yield put({ type: types.TOGGLE_SAVE_FAILED, error: e.toString() })
+    }
+}
+
+function* removeVideo (saves, id) {
     try {
         const
             saves = yield call(store, store.get. LIST_KEY),
@@ -48,12 +60,12 @@ export function* removeVideo (id) {
 
         const newList = [...saves.slice(0, index), ...saves.slice(index + 1)]
 
-        yield call(store, store.set, LIST_KEY, newList)
-        yield call(store, store.del, id)
+        yield call(store.set, LIST_KEY, newList)
+        yield call(store.del, id)
 
-        yield put({ type: types.REMOVE_SAVE_SUCCEEDED, index })
+        yield put({ type: types.REMOVE_SAVE, index })
         
     } catch (e) {
-        yield put({ type: types.REMOVE_SAVE_FAILED, error: e.toString() })
+        yield put({ type: types.TOGGLE_SAVE_FAILED, error: e.toString() })
     }
 }

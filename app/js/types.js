@@ -1,21 +1,35 @@
-const formActionTypes = str => {
+// creates uniform request/success/failure types for a given type
+const formActionTypes = (type, keepBase = false) => {
     const
-        base = str.toUpperCase(),
+        base = type.toUpperCase(),
         request = base + '_REQUESTED',
         succeed = base + '_SUCCEEDED',
         failure = base + '_FAILED'
 
-    return {
+    const types = {
         [request]: request,
         [succeed]: succeed,
         [failure]: failure
     }
+
+    if (!keepBase) return types
+
+    types[base] = base
+    return types
 }
+
+// creates an object of custom types to spread onto exported object
+const formCustomActionTypes = (...types) => types.reduce((obj, type) => {
+    obj[type] = type
+}, {})
+    
 
 export default {
     ...formActionTypes('FETCH_LAST_SEARCH_RESULTS'),
     ...formActionTypes('SEARCH'),
     ...formActionTypes('FETCH_SAVES'),
-    ...formActionTypes('ADD_SAVE'),
-    ...formActionTypes('REMOVE_SAVE')
+    ...formActionTypes('TOGGLE_SAVE'),
+    ...formCustomActionTypes('ADD_SAVE', 'REMOVE_SAVE'),
+    ...formActionTypes('SET_CURRENT_VIDEO', true)
+    
 }

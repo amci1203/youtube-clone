@@ -56,4 +56,4 @@ class Search extends Component {
 
 }
 
-export default connect(null, { request }, Search)
+export default connect(Search, null, { request })

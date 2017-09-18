@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
         the component to connect to the store
 */
 
-export default (reducers = null, actions = null, component) => connect(
+export default (component, reducers = null, actions = null) => connect(
     state => typeof reducers == 'string' ? reducers.split(' ').reduce((obj, reducer) => {
         obj[reducer] = state[reducer]
     }, {}) : {},

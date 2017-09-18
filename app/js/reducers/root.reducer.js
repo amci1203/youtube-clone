@@ -4,6 +4,7 @@ import logger from 'redux-logger'
 
 import search from './search.reducer'
 import saves  from './saves.reducer'
+import video  from './video.reducer'
 import rootSaga from '../sagas'
 
 const
@@ -11,7 +12,7 @@ const
     middlewares = [ sagas, logger ],
 
     store = createStore(
-        combineReducers({ search, saves }),
+        combineReducers({ search, saves, video }),
         applyMiddleware(...middlewares)
     )
 

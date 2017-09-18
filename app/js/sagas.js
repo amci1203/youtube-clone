@@ -2,11 +2,12 @@ import { all, takeLatest, takeEvery } from 'redux-saga/effects'
 
 import types from './types'
 import { searchYouTube, fetchLastSearchResults } from './actions/search.actions'
-import { fetchVideos, addVideo, removeVideo } from './actions/saves.actions'
+import { fetchVideos, toggleVideoSaveStatus } from './actions/saves.actions'
+import { setCurrentVideo, fetchCurrentVideo } from './actions/video.actions'
 
 const on = (dispatch, fn) => {
     try {
-        const errMsg = 'the supplied dispatch.type does not exist in the types.object; must be a typo'
+        const errMsg = `the supplied dispatch.type, "${dispatch}" does not exist in the types.object; must be a typo`
         if (!dispatch) throw Error(errMsg)
     } catch (e) {
         console.error(e)
@@ -20,7 +21,8 @@ export default function* () {
     yield on(types.SEARCH_REQUESTED, searchYouTube)
     yield on(types.FETCH_LAST_SEARCH_RESULTS_REQUESTED, fetchLastSearchResults)
     yield on(types.FETCH_SAVES_REQUESTED, fetchVideos)
-    yield on(types.ADD_SAVE_REQUESTED, addVideo)
-    yield on(types.REMOVE_SAVE_REQUESTED, removeVideo)
+    yield on(types.TOGGLE_SAVE_REQUESTED, toggleVideoSaveStatus)
+    yield on(types.SET_CURRENT_VIDEO_REQUESTED, fetchCurrentVideo)
+    yield on(types.SET_CURRENT_VIDEO, setCurrentVideo)
 
 }
