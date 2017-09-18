@@ -3,3 +3,4 @@
 /logs/
 !/logs/ignore-me
 /key.txt
+/yarn-error.log

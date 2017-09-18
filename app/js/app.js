@@ -8,12 +8,13 @@ import { Provider } from 'react-redux'
 import store from './reducers/root.reducer'
 
 import Search from './components/search'
+import Video from './components/video'
+import VideoThumbnails from './components/video-list'
 
 const App = props => (
     <div>
         <Search />
         <div className='wrapper'>
-            <h1 style={{textAlign:'center'}}>HELLO WORLD</h1>
         </div>
     </div>
 )

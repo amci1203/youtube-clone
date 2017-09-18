@@ -19,9 +19,9 @@ const formActionTypes = (type, keepBase = false) => {
 }
 
 // creates an object of custom types to spread onto exported object
-const formCustomActionTypes = (...types) => types.reduce((obj, type) => {
-    obj[type] = type
-}, {})
+const formCustomActionTypes = (...types) => types.reduce((obj, type) => (
+    Object.assign(obj, { [type]: type })
+), {})
     
 
 export default {
