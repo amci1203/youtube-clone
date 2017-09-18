@@ -53,7 +53,7 @@ function* addVideo (saves, video) {
 function* removeVideo (saves, id) {
     try {
         const
-            saves = yield call(store, store.get. LIST_KEY),
+            saves = yield call(store.get. LIST_KEY),
             index = saves.indexOf(id)
 
         if (index === -1) throw Error('Specified id does not refer to any saved video')

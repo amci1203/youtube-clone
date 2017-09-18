@@ -15,6 +15,7 @@ const App = props => (
     <div>
         <Search />
         <div className='wrapper'>
+            <VideoThumbnails />
         </div>
     </div>
 )

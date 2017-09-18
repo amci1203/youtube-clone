@@ -20,7 +20,7 @@ function* currentVideo (v) {
         } else {
             video = yield call(store.get, VIDEO_KEY)
         }
-        yield put({ type: types.SET_CURRENT_VIDEO_SUCCESSFUL, video })
+        yield put({ type: types.SET_CURRENT_VIDEO_SUCCEEDED, video })
     } catch (e) {
         yield put({ type: types.SET_CURRENT_VIDEO_FAILED, error: e.toString() })
     }

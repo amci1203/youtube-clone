@@ -1,7 +1,9 @@
-.results {
+.video-list {
     width: 100%;
     padding: 0 2rem;
     margin: 0 auto;
+    flex-basis: 33.33%;
+    flex-grow: 1;
 
     &--placeholder {
         font-weight: 100;
@@ -10,16 +12,13 @@
         align-self: center;
     }
 
-    &--aside {
-        flex-basis: 33.33%;
-    }
 
     @mixin isSmall {
         flex-basis: 100% !important;
         padding: 0;
     }
 
-    &__list-item {
+    &__item {
         @mixin noTextDecoration;
 
         display: block;
