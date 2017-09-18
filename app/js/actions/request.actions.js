@@ -5,7 +5,7 @@ export default (str, ...args) => {
     try {
         if (typeof types[type] != 'string')
             throw Error('that action group does not have a request type')
-        return { type, args }
+        return { type, args: args.length ? args : null }
     } catch (e) {
         console.error(e)
     }

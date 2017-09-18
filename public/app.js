@@ -32017,13 +32017,15 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 
 
+const on = (dispatch, fn) => Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["c" /* takeLatest */])(dispatch, ({ args }) => args > 0 ? fn(...args) : fn());
+
 /* harmony default export */ __webpack_exports__["a"] = (function* () {
 
-    yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["c" /* takeLatest */])(__WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].SEARCH_REQUESTED, ({ args }) => Object(__WEBPACK_IMPORTED_MODULE_2__actions_search_actions__["b" /* searchYouTube */])(...args));
-    yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["c" /* takeLatest */])(__WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].FETCH_LAST_SEARCH_RESULTS_REQUESTED, __WEBPACK_IMPORTED_MODULE_2__actions_search_actions__["a" /* fetchLastSearchResults */]);
-    yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["c" /* takeLatest */])(__WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].FETCH_SAVES_REQUESTED, __WEBPACK_IMPORTED_MODULE_3__actions_saves_actions__["b" /* fetchVideos */]);
-    yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["c" /* takeLatest */])(__WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].ADD_SAVE_REQUESTED, __WEBPACK_IMPORTED_MODULE_3__actions_saves_actions__["a" /* addVideo */]);
-    yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["c" /* takeLatest */])(__WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].REMOVE_SAVE_REQUESTED, __WEBPACK_IMPORTED_MODULE_3__actions_saves_actions__["c" /* removeVideo */]);
+    yield on(__WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].SEARCH_REQUESTED, __WEBPACK_IMPORTED_MODULE_2__actions_search_actions__["b" /* searchYouTube */]);
+    yield on(__WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].FETCH_LAST_SEARCH_RESULTS_REQUESTED, __WEBPACK_IMPORTED_MODULE_2__actions_search_actions__["a" /* fetchLastSearchResults */]);
+    yield on(__WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].FETCH_SAVES_REQUESTED, __WEBPACK_IMPORTED_MODULE_3__actions_saves_actions__["b" /* fetchVideos */]);
+    yield on(__WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].ADD_SAVE_REQUESTED, __WEBPACK_IMPORTED_MODULE_3__actions_saves_actions__["a" /* addVideo */]);
+    yield on(__WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].REMOVE_SAVE_REQUESTED, __WEBPACK_IMPORTED_MODULE_3__actions_saves_actions__["c" /* removeVideo */]);
 });
 
 /***/ }),
@@ -32655,7 +32657,7 @@ class Search extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
 
     search(cancel = false) {
         if (cancel) this.debounced.cancel;
-        this.props.request('SEARCH', this.input.value);
+        this.props.request('SEARCH');
     }
 
     render() {
@@ -33216,7 +33218,7 @@ module.exports = isObjectLike;
     const type = str.toUpperCase() + '_REQUESTED';
     try {
         if (typeof __WEBPACK_IMPORTED_MODULE_0__types__["a" /* default */][type] != 'string') throw Error('that action group does not have a request type');
-        return { type, args };
+        return { type, args: args.length ? args : null };
     } catch (e) {
         console.error(e);
     }
