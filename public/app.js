@@ -3922,18 +3922,18 @@ function stdChannel(subscribe) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["h"] = take;
+/* harmony export (immutable) */ __webpack_exports__["g"] = take;
 /* unused harmony export takem */
-/* harmony export (immutable) */ __webpack_exports__["g"] = put;
+/* harmony export (immutable) */ __webpack_exports__["f"] = put;
 /* unused harmony export all */
 /* unused harmony export race */
-/* harmony export (immutable) */ __webpack_exports__["d"] = call;
-/* harmony export (immutable) */ __webpack_exports__["b"] = apply;
+/* harmony export (immutable) */ __webpack_exports__["c"] = call;
+/* unused harmony export apply */
 /* unused harmony export cps */
-/* harmony export (immutable) */ __webpack_exports__["f"] = fork;
+/* harmony export (immutable) */ __webpack_exports__["e"] = fork;
 /* unused harmony export spawn */
 /* unused harmony export join */
-/* harmony export (immutable) */ __webpack_exports__["e"] = cancel;
+/* harmony export (immutable) */ __webpack_exports__["d"] = cancel;
 /* unused harmony export select */
 /* harmony export (immutable) */ __webpack_exports__["a"] = actionChannel;
 /* unused harmony export cancelled */
@@ -3941,9 +3941,9 @@ function stdChannel(subscribe) {
 /* unused harmony export getContext */
 /* unused harmony export setContext */
 /* unused harmony export takeEvery */
-/* harmony export (immutable) */ __webpack_exports__["i"] = takeLatest;
+/* harmony export (immutable) */ __webpack_exports__["h"] = takeLatest;
 /* unused harmony export throttle */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return asEffect; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return asEffect; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__sagaHelpers__ = __webpack_require__(133);
 
@@ -6514,11 +6514,11 @@ var buffers = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__internal_io__ = __webpack_require__(27);
 /* unused harmony reexport take */
 /* unused harmony reexport takem */
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_0__internal_io__["g"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_0__internal_io__["f"]; });
 /* unused harmony reexport all */
 /* unused harmony reexport race */
-/* unused harmony reexport call */
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__internal_io__["b"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__internal_io__["c"]; });
+/* unused harmony reexport apply */
 /* unused harmony reexport cps */
 /* unused harmony reexport fork */
 /* unused harmony reexport spawn */
@@ -6531,7 +6531,7 @@ var buffers = {
 /* unused harmony reexport getContext */
 /* unused harmony reexport setContext */
 /* unused harmony reexport takeEvery */
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_0__internal_io__["i"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_0__internal_io__["h"]; });
 /* unused harmony reexport throttle */
 
 
@@ -15120,7 +15120,7 @@ function proc(iterator) {
       __WEBPACK_IMPORTED_MODULE_0__utils__["n" /* is */].promise(effect) ? resolvePromise(effect, currCb) : __WEBPACK_IMPORTED_MODULE_0__utils__["n" /* is */].helper(effect) ? runForkEffect(wrapHelper(effect), effectId, currCb) : __WEBPACK_IMPORTED_MODULE_0__utils__["n" /* is */].iterator(effect) ? resolveIterator(effect, effectId, name, currCb)
 
       // declarative effects
-      : __WEBPACK_IMPORTED_MODULE_0__utils__["n" /* is */].array(effect) ? runParallelEffect(effect, effectId, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["c" /* asEffect */].take(effect)) ? runTakeEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["c" /* asEffect */].put(effect)) ? runPutEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["c" /* asEffect */].all(effect)) ? runAllEffect(data, effectId, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["c" /* asEffect */].race(effect)) ? runRaceEffect(data, effectId, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["c" /* asEffect */].call(effect)) ? runCallEffect(data, effectId, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["c" /* asEffect */].cps(effect)) ? runCPSEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["c" /* asEffect */].fork(effect)) ? runForkEffect(data, effectId, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["c" /* asEffect */].join(effect)) ? runJoinEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["c" /* asEffect */].cancel(effect)) ? runCancelEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["c" /* asEffect */].select(effect)) ? runSelectEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["c" /* asEffect */].actionChannel(effect)) ? runChannelEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["c" /* asEffect */].flush(effect)) ? runFlushEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["c" /* asEffect */].cancelled(effect)) ? runCancelledEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["c" /* asEffect */].getContext(effect)) ? runGetContextEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["c" /* asEffect */].setContext(effect)) ? runSetContextEffect(data, currCb) : /* anything else returned as is */currCb(effect)
+      : __WEBPACK_IMPORTED_MODULE_0__utils__["n" /* is */].array(effect) ? runParallelEffect(effect, effectId, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["b" /* asEffect */].take(effect)) ? runTakeEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["b" /* asEffect */].put(effect)) ? runPutEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["b" /* asEffect */].all(effect)) ? runAllEffect(data, effectId, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["b" /* asEffect */].race(effect)) ? runRaceEffect(data, effectId, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["b" /* asEffect */].call(effect)) ? runCallEffect(data, effectId, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["b" /* asEffect */].cps(effect)) ? runCPSEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["b" /* asEffect */].fork(effect)) ? runForkEffect(data, effectId, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["b" /* asEffect */].join(effect)) ? runJoinEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["b" /* asEffect */].cancel(effect)) ? runCancelEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["b" /* asEffect */].select(effect)) ? runSelectEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["b" /* asEffect */].actionChannel(effect)) ? runChannelEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["b" /* asEffect */].flush(effect)) ? runFlushEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["b" /* asEffect */].cancelled(effect)) ? runCancelledEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["b" /* asEffect */].getContext(effect)) ? runGetContextEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["b" /* asEffect */].setContext(effect)) ? runSetContextEffect(data, currCb) : /* anything else returned as is */currCb(effect)
     );
   }
 
@@ -31794,9 +31794,9 @@ function takeEvery(patternOrChannel, worker) {
     args[_key - 2] = arguments[_key];
   }
 
-  var yTake = { done: false, value: Object(__WEBPACK_IMPORTED_MODULE_1__io__["h" /* take */])(patternOrChannel) };
+  var yTake = { done: false, value: Object(__WEBPACK_IMPORTED_MODULE_1__io__["g" /* take */])(patternOrChannel) };
   var yFork = function yFork(ac) {
-    return { done: false, value: __WEBPACK_IMPORTED_MODULE_1__io__["f" /* fork */].apply(undefined, [worker].concat(args, [ac])) };
+    return { done: false, value: __WEBPACK_IMPORTED_MODULE_1__io__["e" /* fork */].apply(undefined, [worker].concat(args, [ac])) };
   };
 
   var action = void 0,
@@ -31832,12 +31832,12 @@ function takeLatest(patternOrChannel, worker) {
     args[_key - 2] = arguments[_key];
   }
 
-  var yTake = { done: false, value: Object(__WEBPACK_IMPORTED_MODULE_1__io__["h" /* take */])(patternOrChannel) };
+  var yTake = { done: false, value: Object(__WEBPACK_IMPORTED_MODULE_1__io__["g" /* take */])(patternOrChannel) };
   var yFork = function yFork(ac) {
-    return { done: false, value: __WEBPACK_IMPORTED_MODULE_1__io__["f" /* fork */].apply(undefined, [worker].concat(args, [ac])) };
+    return { done: false, value: __WEBPACK_IMPORTED_MODULE_1__io__["e" /* fork */].apply(undefined, [worker].concat(args, [ac])) };
   };
   var yCancel = function yCancel(task) {
-    return { done: false, value: Object(__WEBPACK_IMPORTED_MODULE_1__io__["e" /* cancel */])(task) };
+    return { done: false, value: Object(__WEBPACK_IMPORTED_MODULE_1__io__["d" /* cancel */])(task) };
   };
 
   var task = void 0,
@@ -31889,12 +31889,12 @@ function throttle(delayLength, pattern, worker) {
 
   var yActionChannel = { done: false, value: Object(__WEBPACK_IMPORTED_MODULE_1__io__["a" /* actionChannel */])(pattern, __WEBPACK_IMPORTED_MODULE_3__buffers__["a" /* buffers */].sliding(1)) };
   var yTake = function yTake() {
-    return { done: false, value: Object(__WEBPACK_IMPORTED_MODULE_1__io__["h" /* take */])(channel) };
+    return { done: false, value: Object(__WEBPACK_IMPORTED_MODULE_1__io__["g" /* take */])(channel) };
   };
   var yFork = function yFork(ac) {
-    return { done: false, value: __WEBPACK_IMPORTED_MODULE_1__io__["f" /* fork */].apply(undefined, [worker].concat(args, [ac])) };
+    return { done: false, value: __WEBPACK_IMPORTED_MODULE_1__io__["e" /* fork */].apply(undefined, [worker].concat(args, [ac])) };
   };
-  var yDelay = { done: false, value: Object(__WEBPACK_IMPORTED_MODULE_1__io__["d" /* call */])(__WEBPACK_IMPORTED_MODULE_4__utils__["j" /* delay */], delayLength) };
+  var yDelay = { done: false, value: Object(__WEBPACK_IMPORTED_MODULE_1__io__["c" /* call */])(__WEBPACK_IMPORTED_MODULE_4__utils__["j" /* delay */], delayLength) };
 
   var setAction = function setAction(ac) {
     return action = ac;
@@ -32017,7 +32017,16 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 
 
-const on = (dispatch, fn) => Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["c" /* takeLatest */])(dispatch, ({ args }) => args > 0 ? fn(...args) : fn());
+const on = (dispatch, fn) => {
+    try {
+        const errMsg = 'the supplied dispatch.type does not exist in the types.object; must be a typo';
+        if (!dispatch) throw Error(errMsg);
+    } catch (e) {
+        console.error(e);
+    }
+
+    return Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["c" /* takeLatest */])(dispatch, ({ args }) => args ? fn(...args) : fn());
+};
 
 /* harmony default export */ __webpack_exports__["a"] = (function* () {
 
@@ -32048,14 +32057,12 @@ const on = (dispatch, fn) => Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effec
 
 const LIST_KEY = 'last_search_results';
 
-function* searchYouTube(term = 'TEST') {
+function* searchYouTube(term) {
     try {
-        // const videos = yield apply(axios, axios.post, '/search', { term })
-        // console.log(videos)
-        // store.set(LIST_KEY, videos)
-        // yield apply(store, store.set, LIST_KEY, videos)
+        const videos = yield Object(__WEBPACK_IMPORTED_MODULE_1_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_0_axios___default.a.post, '/search', { term });
 
-        yield Object(__WEBPACK_IMPORTED_MODULE_1_redux_saga_effects__["b" /* put */])({ type: __WEBPACK_IMPORTED_MODULE_2__types__["a" /* default */].SEARCH_SUCCEEDED, videos: term });
+        // yield call(store.set(LIST_KEY, videos))
+        yield Object(__WEBPACK_IMPORTED_MODULE_1_redux_saga_effects__["b" /* put */])({ type: __WEBPACK_IMPORTED_MODULE_2__types__["a" /* default */].SEARCH_SUCCEEDED, videos });
     } catch (e) {
         yield Object(__WEBPACK_IMPORTED_MODULE_1_redux_saga_effects__["b" /* put */])({ type: __WEBPACK_IMPORTED_MODULE_2__types__["a" /* default */].SEARCH_FAILED, error: e.toString() });
     }
@@ -32063,7 +32070,7 @@ function* searchYouTube(term = 'TEST') {
 
 function* fetchLastSearchResults() {
     try {
-        const videos = yield Object(__WEBPACK_IMPORTED_MODULE_1_redux_saga_effects__["a" /* apply */])(__WEBPACK_IMPORTED_MODULE_3__helpers_store__["a" /* default */], __WEBPACK_IMPORTED_MODULE_3__helpers_store__["a" /* default */].get, LIST_KEY);
+        const videos = yield Object(__WEBPACK_IMPORTED_MODULE_1_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_3__helpers_store__["a" /* default */].get, LIST_KEY);
 
         yield Object(__WEBPACK_IMPORTED_MODULE_1_redux_saga_effects__["b" /* put */])({ type: __WEBPACK_IMPORTED_MODULE_2__types__["a" /* default */].FETCH_LAST_SEARCH_RESULTS_SUCCEEDED, videos });
     } catch (e) {
@@ -32566,14 +32573,14 @@ module.exports = function spread(callback) {
 const LIST_KEY = 'saved_videos';
 
 /*
-    I know yielding and using the apply effect is unneccessary for localStorage,
+    I know yielding and using the call effect is unneccessary for localStorage,
     but as this is being done for practicing with sagas, I'll pretend like 'store'
     is a connected database that functions asynchronously
 */
 
 function* fetchVideos() {
     try {
-        const videosIds = yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* apply */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].get, LIST_KEY),
+        const videosIds = yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].get, LIST_KEY),
               videos = videoIds.map(id => __WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].get(id));
 
         yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["b" /* put */])({ type: __WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].FETCH_SAVES_SUCCEEDED, videos });
@@ -32586,8 +32593,8 @@ function* addVideo(video) {
     try {
         const list = yield __WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].get(LIST_KEY);
 
-        yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* apply */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].set, LIST_KEY, list.concat([video.id]));
-        yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* apply */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].get, video.id, video);
+        yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].set, LIST_KEY, list.concat([video.id]));
+        yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].get, video.id, video);
 
         yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["b" /* put */])({ type: __WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].ADD_SAVE_SUCCEEDED, video });
     } catch (e) {
@@ -32597,15 +32604,15 @@ function* addVideo(video) {
 
 function* removeVideo(id) {
     try {
-        const saves = yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* apply */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].get.LIST_KEY),
+        const saves = yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].get.LIST_KEY),
               index = saves.indexOf(id);
 
         if (index === -1) throw Error('Specified id does not refer to any saved video');
 
         const newList = [...saves.slice(0, index), ...saves.slice(index + 1)];
 
-        yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* apply */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].set, LIST_KEY, newList);
-        yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* apply */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].del, id);
+        yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].set, LIST_KEY, newList);
+        yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].del, id);
 
         yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["b" /* put */])({ type: __WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].REMOVE_SAVE_SUCCEEDED, index });
     } catch (e) {
@@ -32657,7 +32664,7 @@ class Search extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
 
     search(cancel = false) {
         if (cancel) this.debounced.cancel;
-        this.props.request('SEARCH');
+        this.props.request('SEARCH', this.input.value);
     }
 
     render() {

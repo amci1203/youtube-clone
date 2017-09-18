@@ -4,9 +4,16 @@ import types from './types'
 import { searchYouTube, fetchLastSearchResults } from './actions/search.actions'
 import { fetchVideos, addVideo, removeVideo } from './actions/saves.actions'
 
-const on = (dispatch, fn) => takeLatest(dispatch, ({ args }) => (
-    args > 0 ? fn(...args) : fn()
-))
+const on = (dispatch, fn) => {
+    try {
+        const errMsg = 'the supplied dispatch.type does not exist in the types.object; must be a typo'
+        if (!dispatch) throw Error(errMsg)
+    } catch (e) {
+        console.error(e)
+    }
+
+    return takeLatest(dispatch, ({ args }) => args ? fn(...args) : fn())
+}
 
 export default function* () {
     

@@ -8,31 +8,35 @@ const
 
 let API_KEY
 
-const search = term => new Promise(resolve => {
+const search = term => new Promise((resolve, reject) => {
     const YT = require('youtube-api-search')
-    
-    YT({ key: API_KEY, term }, results => {
-        if (results.length === 0)
-            resolve('NO RESULTS FOUND')
+    try {
+        YT({ key: 'AIzaSyDbi82FzrzEesB2Ra-LclTEy2M0Ug8pE1k', term }, results => {
+            if (results.length === 0)
+                resolve('NO RESULTS FOUND')
+            
+            const videos = results.map((v, i) => {
+                const { title, description, thumbnails } = v.snippet
+                return {
+                    id: v.id.videoId,
+                    index: i,
+                    title,
+                    description,
+                    thumbnails
+                }
+            })
 
-        const videos = results.map((v, i) => {
-            const { title, description, thumbnails } = v.snippet
-            return {
-                id: v.id.videoId,
-                index: i,
-                title,
-                description,
-                thumbnails
-            }
+            resolve(videos)
         })
-
-        resolve(videos)
-    })
+    } catch (e) {
+        reject(e.toString())
+    }
 })
 
 ;(async () => {
     try {
         API_KEY = await fs.readFile('key.txt')
+        console.log('API_KEY set: %s', API_KEY)
     } catch (e) {
         console.error(e.toString())
     }
@@ -46,7 +50,8 @@ app
     .use(static(__dirname + '/public'))
 
     .post('/search', async (req, res) => {
-        res.json(await search(req.body.term))
+        const results = await search(req.body.term)
+        res.json(results)
     })
 
     .listen(app.get('port'), err => {

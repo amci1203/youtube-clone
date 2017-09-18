@@ -31,7 +31,7 @@ class Search extends Component {
 
     search (cancel = false) {
         if (cancel) this.debounced.cancel
-        this.props.request('SEARCH')
+        this.props.request('SEARCH', this.input.value)
     }
 
     render () {
