@@ -4,7 +4,10 @@ const
     bSync = require('browser-sync'),
     
     browser = bSync.create(),
-    stylesheet = './public/styles.css'
+    stylesheet = './public/styles.css',
+
+    fallback = require('connect-history-api-fallback'),
+    log      = require('connect-logger')
 
 gulp
 
@@ -18,11 +21,20 @@ gulp
         //     PUBLIC_FOLDER = 'public'
 
         // injectIcons(INDEX_PATH, PUBLIC_FOLDER)
+        const
+            format = '%date %status %method %url',
+            index = '/index.html',
+            htmlAcceptHeaders = ['text/html', 'application/xhtml+xml']
 
         browser.init({
             notify : false,
             port   : 8888,
-            proxy  : 'localhost:3000'
+            proxy  : 'localhost:3000',
+
+            middleware: [
+                log({ format }),
+                fallback({ format, htmlAcceptHeaders })
+            ]
         })
 
         watch('./app/css/**/*.css', () => gulp.start('inject-styles'))

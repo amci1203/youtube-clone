@@ -47,7 +47,9 @@ app
     .set('port', process.env.PORT || 3000)
 
     .use(bodyParser.json())
-    .use(static(__dirname + '/public'))
+    .use(static(__dirname + '/public', {
+        fallthrough: true
+    }))
 
     .post('/search', async (req, res) => {
         console.log(req.body)
