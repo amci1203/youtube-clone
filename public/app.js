@@ -9070,23 +9070,28 @@ function fsmIterator(fsm, q0) {
 /* harmony default export */ __webpack_exports__["a"] = ((function () {
     const store = window.localStorage,
           noExistErrMsg = 'provided key does not exist',
-          noOverwriteErrMsg = 'provided key already exists; set third arg to true if you wish to overwrite this value',
-          del = key => new Promise((resolve, reject) => {
-        if (store.get(key) == null) reject(noExistErrMsg);
+          noOverwriteErrMsg = 'provided key already exists; the third argument should be truthy to allow overwrites',
+          exists = key => !!store.getItem(key),
+          // used by other methods
+    pExists = key => Promise.resolve(exists(key)),
+          // exported
+
+    del = key => new Promise((resolve, reject) => {
+        if (!exists(key)) reject(noExistErrMsg);
         store.removeItem(key);
         resolve(1);
     }),
           get = key => new Promise((resolve, reject) => {
-        if (store.get(key) === null) reject(noExistErrMsg);
+        if (!exists(key)) reject(noExistErrMsg);
         resolve(JSON.parse(store.getItem(key)));
     }),
           set = (key, val, overwrite = false) => new Promise((resolve, reject) => {
-        if (!overwrite && store.getItem(key) !== null) reject(noOverwriteErrMsg);
+        if (!overwrite && exists(key)) reject(noOverwriteErrMsg);
         store.setItem(key, JSON.stringify(val));
-        resolve(1);
+        resolve(1); // returns an okay like db updates would
     });
 
-    return { del, get, set };
+    return { del, get, set, exists: pExists };
 })());
 
 /***/ }),
@@ -32231,16 +32236,16 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 
 
-/* harmony default export */ __webpack_exports__["a"] = ((state = {}, action) => {
+/* harmony default export */ __webpack_exports__["a"] = ((state = { videos: [] }, action) => {
     const { type, videos, video, index, error } = action;
 
     switch (type) {
         case __WEBPACK_IMPORTED_MODULE_0__types__["a" /* default */].FETCH_SAVES_SUCCEEDED:
             return { videos, error: null };
         case __WEBPACK_IMPORTED_MODULE_0__types__["a" /* default */].ADD_SAVE:
-            return { videos: state.videos.concat([video]) };
+            return { videos: [...state.videos, video] };
         case __WEBPACK_IMPORTED_MODULE_0__types__["a" /* default */].REMOVE_SAVE:
-            const removeVideo = (arr, i) => [...videos.slice(0, i), ...videos.slice(i + 1)];
+            const removeVideo = (arr, i) => [...arr.slice(0, i), ...arr.slice(i + 1)];
             return { videos: removeVideo(state.videos, index) };
         case __WEBPACK_IMPORTED_MODULE_0__types__["a" /* default */].TOGGLE_SAVE_FAILED:
         case __WEBPACK_IMPORTED_MODULE_0__types__["a" /* default */].FETCH_SAVES_FAILED:
@@ -32300,11 +32305,12 @@ const on = (dispatch, fn) => {
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (function* () {
+    yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_3__actions_saves_actions__["b" /* initSaveList */]);
 
     yield on(__WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].SEARCH_REQUESTED, __WEBPACK_IMPORTED_MODULE_2__actions_search_actions__["b" /* searchYouTube */]);
     yield on(__WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].FETCH_LAST_SEARCH_RESULTS_REQUESTED, __WEBPACK_IMPORTED_MODULE_2__actions_search_actions__["a" /* fetchLastSearchResults */]);
     yield on(__WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].FETCH_SAVES_REQUESTED, __WEBPACK_IMPORTED_MODULE_3__actions_saves_actions__["a" /* fetchVideos */]);
-    yield on(__WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].TOGGLE_SAVE_REQUESTED, __WEBPACK_IMPORTED_MODULE_3__actions_saves_actions__["b" /* toggleVideoSaveStatus */]);
+    yield on(__WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].TOGGLE_SAVE_REQUESTED, __WEBPACK_IMPORTED_MODULE_3__actions_saves_actions__["c" /* toggleVideoSaveStatus */]);
     yield on(__WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].SET_CURRENT_VIDEO_REQUESTED, __WEBPACK_IMPORTED_MODULE_4__actions_video_actions__["a" /* fetchCurrentVideo */]);
     yield on(__WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].SET_CURRENT_VIDEO, __WEBPACK_IMPORTED_MODULE_4__actions_video_actions__["b" /* setCurrentVideo */]);
 });
@@ -32842,17 +32848,37 @@ module.exports = function spread(callback) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return initSaveList; });
 /* harmony export (immutable) */ __webpack_exports__["a"] = fetchVideos;
-/* harmony export (immutable) */ __webpack_exports__["b"] = toggleVideoSaveStatus;
+/* harmony export (immutable) */ __webpack_exports__["c"] = toggleVideoSaveStatus;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__ = __webpack_require__(35);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__types__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__helpers_store__ = __webpack_require__(76);
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
 
 
 
 
 
 const LIST_KEY = 'saved_videos';
+
+// INIT LIST
+let initSaveList = (() => {
+    var _ref = _asyncToGenerator(function* () {
+        const exists = yield __WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].exists(LIST_KEY);
+        if (!exists) {
+            yield __WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].set(LIST_KEY, []);
+            console.log('saves list initialized');
+        } else {
+            console.log('saves list already initialized');
+        }
+    });
+
+    return function initSaveList() {
+        return _ref.apply(this, arguments);
+    };
+})();
 
 /*
     I know yielding and using the call effect is unneccessary for localStorage,
@@ -32867,6 +32893,7 @@ function* fetchVideos() {
 
         yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["b" /* put */])({ type: __WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].FETCH_SAVES_SUCCEEDED, videos });
     } catch (e) {
+        console.error(e);
         yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["b" /* put */])({ type: __WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].FETCH_SAVES_FAILED, error: e.toString() });
     }
 }
@@ -32876,37 +32903,40 @@ function* toggleVideoSaveStatus(video) {
         const { id } = video,
               saves = yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].get, LIST_KEY);
 
-        saves.indexOf(id) === -1 ? addVideo(saves, video) : removeVideo(saves, id);
+        saves.indexOf(id) === -1 ? yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(addVideo, saves, video) : yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(removeVideo, saves, id);
     } catch (e) {
+        console.error(e);
         yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["b" /* put */])({ type: __WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].TOGGLE_SAVE_FAILED, error: e.toString() });
     }
 }
 
 function* addVideo(saves, video) {
     try {
-        yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].set, LIST_KEY, [...saves, video.id]);
-        yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].get, video.id, video);
+        yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].set, LIST_KEY, [...saves, video.id], true);
+        yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].set, video.id, video);
 
         yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["b" /* put */])({ type: __WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].ADD_SAVE, video });
     } catch (e) {
+        console.error(e);
         yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["b" /* put */])({ type: __WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].TOGGLE_SAVE_FAILED, error: e.toString() });
     }
 }
 
 function* removeVideo(saves, id) {
     try {
-        const saves = yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].get.LIST_KEY),
+        const saves = yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].get, LIST_KEY),
               index = saves.indexOf(id);
 
         if (index === -1) throw Error('Specified id does not refer to any saved video');
 
         const newList = [...saves.slice(0, index), ...saves.slice(index + 1)];
 
-        yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].set, LIST_KEY, newList);
+        yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].set, LIST_KEY, newList, true);
         yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].del, id);
 
         yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["b" /* put */])({ type: __WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].REMOVE_SAVE, index });
     } catch (e) {
+        console.error(e);
         yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["b" /* put */])({ type: __WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].TOGGLE_SAVE_FAILED, error: e.toString() });
     }
 }
@@ -33444,8 +33474,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 const VideoList = ({ search, saves, match, request }) => {
     let numVids = 0;
-    if (Array.isArray(search.results)) numVids += search.results.length;
-    if (Array.isArray(saves.videos)) numVids += saves.videos.length;
+    if (Array.isArray(search.results)) {
+        numVids += search.results.length;
+    }
+    if (Array.isArray(saves.videos)) {
+        numVids += saves.videos.length;
+    }
 
     if (!numVids) return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'section',

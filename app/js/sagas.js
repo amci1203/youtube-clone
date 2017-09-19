@@ -1,8 +1,8 @@
-import { all, takeLatest, takeEvery } from 'redux-saga/effects'
+import { all, call, takeLatest, takeEvery } from 'redux-saga/effects'
 
 import types from './types'
 import { searchYouTube, fetchLastSearchResults } from './actions/search.actions'
-import { fetchVideos, toggleVideoSaveStatus } from './actions/saves.actions'
+import { initSaveList, fetchVideos, toggleVideoSaveStatus } from './actions/saves.actions'
 import { setCurrentVideo, fetchCurrentVideo } from './actions/video.actions'
 
 const on = (dispatch, fn) => {
@@ -17,6 +17,8 @@ const on = (dispatch, fn) => {
 }
 
 export default function* () {
+    yield call(initSaveList)
+
     
     yield on(types.SEARCH_REQUESTED, searchYouTube)
     yield on(types.FETCH_LAST_SEARCH_RESULTS_REQUESTED, fetchLastSearchResults)

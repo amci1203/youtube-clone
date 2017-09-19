@@ -6,7 +6,6 @@ import store from './helpers/store'
 
 const LIST_KEY = 'last_search_results'
 
-
 /*
     I know yielding and using the call effect is unneccessary for localStorage,
     but as this is being done for practicing with sagas, I'll pretend like 'store'

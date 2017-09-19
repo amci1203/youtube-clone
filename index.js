@@ -52,7 +52,6 @@ app
     }))
 
     .post('/search', async (req, res) => {
-        console.log(req.body)
         const results = await search(req.body.term)
         res.json(results)
     })

@@ -6,10 +6,12 @@ import Item from './video-list-item';
 
 const VideoList = ({ search, saves, match, request }) => {
     let numVids = 0
-    if (Array.isArray(search.results))
+    if (Array.isArray(search.results)) {
         numVids += search.results.length
-    if (Array.isArray(saves.videos))
+    }
+    if (Array.isArray(saves.videos)) {
         numVids += saves.videos.length
+    }
 
     if (!numVids) return (
         <section className="video-list">
