@@ -46,10 +46,11 @@ app
 
     .set('port', process.env.PORT || 3000)
 
-    .use(bodyParser.urlencoded({ extended: true }))
+    .use(bodyParser.json())
     .use(static(__dirname + '/public'))
 
     .post('/search', async (req, res) => {
+        console.log(req.body)
         const results = await search(req.body.term)
         res.json(results)
     })
