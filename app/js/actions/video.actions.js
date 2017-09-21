@@ -3,7 +3,7 @@ import { call, put } from 'redux-saga/effects'
 import types from '../types'
 import store from './helpers/store'
 
-const VIDEO_KEY = 'last_search_results'
+const VIDEO_KEY = 'current_video'
 
 /*
     I know yielding and using the call effect is unneccessary for localStorage,
@@ -16,13 +16,15 @@ function* currentVideo (v) {
         let video
         if (v) {
             video = v
-            yield call(store.set, video.id, video)
+            yield call(store.set, VIDEO_KEY, video, true)
+            yield put({ type: types.SET_CURRENT_VIDEO_SUCCEEDED, video })
         } else {
             video = yield call(store.get, VIDEO_KEY)
+            yield put({ type: types.FETCH_CURRENT_VIDEO_SUCCEEDED, video })
         }
-        yield put({ type: types.SET_CURRENT_VIDEO_SUCCEEDED, video })
     } catch (e) {
-        yield put({ type: types.SET_CURRENT_VIDEO_FAILED, error: e.toString() })
+        const type = v ? types.SET_CURRENT_VIDEO_FAILED : types.FETCH_CURRENT_VIDEO_FAILED
+        yield put({ type, error: e.toString() })
     }
 }
 

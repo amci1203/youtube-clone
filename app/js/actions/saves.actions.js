@@ -25,8 +25,13 @@ export async function initSaveList () {
 export function* fetchVideos () {
     try {
         const 
-            videosIds = yield call(store.get, LIST_KEY),
-            videos = videoIds.map(id => store.get(id))
+            videoIds = yield call(store.get, LIST_KEY),
+            videos = []
+            
+        for (let id of videoIds) {
+            const v = yield call(store.get, id)
+            videos.push(v)
+        }
 
         yield put({ type: types.FETCH_SAVES_SUCCEEDED, videos })
 

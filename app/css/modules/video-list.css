@@ -118,7 +118,7 @@
     }
 
 
-    &__list-item--aside .media {
+    &__item--aside .media {
         &__thumbnail {
             flex-basis: 20%;
             padding: 0.15rem;

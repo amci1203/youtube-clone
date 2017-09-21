@@ -15,7 +15,8 @@ const App = props => (
     <div>
         <Search />
         <div className='wrapper'>
-            <VideoThumbnails />
+            <Route path='/watch/:id' component={ Video } />
+            <Route path='/' component={ VideoThumbnails } />
         </div>
     </div>
 )

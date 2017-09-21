@@ -29,7 +29,8 @@ export default {
     ...formActionTypes('SEARCH'),
     ...formActionTypes('FETCH_SAVES'),
     ...formActionTypes('TOGGLE_SAVE'),
-    ...formCustomActionTypes('ADD_SAVE', 'REMOVE_SAVE'),
-    ...formActionTypes('SET_CURRENT_VIDEO', true)
+    ...formActionTypes('FETCH_CURRENT_VIDEO'),
+    ...formActionTypes('SET_CURRENT_VIDEO'),
+    ...formCustomActionTypes('ADD_SAVE', 'REMOVE_SAVE')
     
 }

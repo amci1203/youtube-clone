@@ -5,6 +5,18 @@ import types from '../types'
 import store from './helpers/store'
 
 const LIST_KEY = 'last_search_results'
+const TERM_KEY = 'last_search_term'
+
+// INIT LIST
+export async function initSearchList () {
+    const exists = await store.exists(LIST_KEY)
+    if (!exists) {
+        await store.set(LIST_KEY, [])
+        console.log('search list initialized')
+    } else {
+        console.log('search list already initialized')
+    }
+}
 
 /*
     I know yielding and using the call effect is unneccessary for localStorage,
@@ -19,7 +31,8 @@ export function* searchYouTube (term) {
             results = response.data
 
         yield call(store.set, LIST_KEY, results, true)
-        yield put({ type: types.SEARCH_SUCCEEDED, results }) 
+        yield call(store.set, TERM_KEY, term, true)
+        yield put({ type: types.SEARCH_SUCCEEDED, results, term }) 
 
     } catch (e) {
         yield put({ type: types.SEARCH_FAILED, error: e.toString() })
@@ -29,13 +42,10 @@ export function* searchYouTube (term) {
 export function* fetchLastSearchResults () {
     try {
         const
-            idList = yield call(store.get, LIST_KEY),
-            results = idList.map(function* (id) {
-                const v = yield call(store.get, id)
-                return v
-            })
+            term = yield call(store.get, TERM_KEY),
+            results = yield call(store.get, LIST_KEY)
 
-        yield put({ type: types.FETCH_LAST_SEARCH_RESULTS_SUCCEEDED, results }) 
+        yield put({ type: types.FETCH_LAST_SEARCH_RESULTS_SUCCEEDED, results, term }) 
 
     } catch (e) {
         yield put({ type: types.FETCH_LAST_SEARCH_RESULTS_FAILED, error: e.toString() })

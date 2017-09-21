@@ -1,57 +1,63 @@
 import React, { Component } from 'react'
 import { debounce } from 'lodash'
+import PropTypes from 'prop-types'
 
 import connect from './helpers/connect'
+import request from '../actions/request.actions'
+import types   from '../types'
 
 class Video extends Component {
-
-    constructor (props) {
-        super(props)
+    static propTypes = {
+        video: PropTypes.shape({
+            id          : PropTypes.string,
+            title       : PropTypes.string,
+            description : PropTypes.string
+        }),
+        match: PropTypes.object,
+        request: PropTypes.func
     }
-
-    componentDidMount () {
-        this.fixVideoHeight()
-    }
-
-    componentDidUpdate () {
-        this.calc()
-    }
+    
+    componentDidMount    = () => this.fixVideoHeight()
+    componentDidUpdate   = () => this.calc()
+    componentWillUnmount = () => window.removeEventListener('resize', this.calculateVideoHeight)
 
     fixVideoHeight () {
-        this.video       = document.getElementById('current-video')
-        this.description = document.getElementById('current-video-details')
-        this.container   = document.getElementById('current-video-container')
-        this.iframe      = document.getElementById('current-video-iframe')
-
         this.calc = () => {
             const
-                width  = this.video.getBoundingClientRect().width,
+                video       = document.getElementById('current-video'),
+                description = document.getElementById('current-video-details'),
+                container   = document.getElementById('current-video-container'),
+                iframe      = document.getElementById('current-video-iframe')
+
+            if (!video) return
+
+            const
+                width  = video.getBoundingClientRect().width,
                 height = width * 9 / 16
                 
-            this.video.style.height = height + 'px'
+            video.style.height = height + 'px'
             // fix the height of the container
-            this.container.style.height = (this.description.getBoundingClientRect().height + height) + 'px'
+            container.style.height = (description.getBoundingClientRect().height + height) + 'px'
         }
 
         this.calc()
-        this.calculateVideoHeight = debounce(this.calc, 300, { leading: false, trailing: true })
-        window.addEventListener('resize', this.calculateVideoHeight)
+        const calculateVideoHeight = debounce(this.calc, 300, { leading: false, trailing: true })
+        window.addEventListener('resize', calculateVideoHeight)
     }
 
-    componentWillUnmount () {
-        window.removeEventListener('resize', this.calculateVideoHeight)
-    }
 
     render () {
+        const
+            { match, video } = this.props
+
         if (!video)
             return null
         if (video.error)
             return (<h1>ERROR</h1>)
-        
-        const
-            { match, video } = this.props
 
         console.log(video)
+
+        const { title, description } = video
         
         return (
             <div controls id='current-video-container' className='current-video'>
@@ -71,4 +77,4 @@ class Video extends Component {
     }
 }
 
-export default connect(Video, 'video')
+export default connect(Video, 'video', { request })

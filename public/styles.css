@@ -694,25 +694,97 @@ body {
   }
 }
 
-.video-list__list-item--aside .media__thumbnail {
+.video-list__item--aside .media__thumbnail {
             -ms-flex-preferred-size: 20%;
                 flex-basis: 20%;
             padding: 0.15rem;
             padding-right: 1rem;
         }
 
-.video-list__list-item--aside .media__body {
+.video-list__item--aside .media__body {
             -ms-flex-preferred-size: 80%;
                 flex-basis: 80%;
         }
 
 @media (min-width: 991px) {
 
-  .video-list__list-item--aside .media__body__title {
+  .video-list__item--aside .media__body__title {
     font-size: 1.1rem;
   }
 }
 
-.video-list__list-item--aside .media__body__description {
+.video-list__item--aside .media__body__description {
                 display: none;
+}
+
+.current-video {
+
+    -ms-flex-preferred-size: 66.66%;
+
+        flex-basis: 66.66%;
+    -webkit-box-shadow: 0 3px 2px 3px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 3px 2px 3px rgba(0, 0, 0, 0.5);
+    border-radius: 0 0 4.7px 4.7px;
+    -webkit-box-flex: 0;
+        -ms-flex-positive: 0;
+            flex-grow: 0;
+    margin-top: 5rem;
+    margin-right: -1.5rem;
+}
+
+@media (max-width: 991px) {
+
+  .current-video {
+    -ms-flex-preferred-size: 100%;
+        flex-basis: 100%;
+    position: relative;
+    left: -0.45rem;
+    width: 100vw;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    border-radius:0;
+  }
+}
+
+.current-video__video {
+        width: 100%;
+}
+
+@media (max-width: 991px) {
+
+  .current-video__video {
+    height: 100%;
+  }
+}
+
+.current-video__video__iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+}
+
+.current-video__details {
+        background: #FFF;
+        color: #333;
+
+        padding: 0.65rem 2rem;
+        border-radius: 0 0 4.7px 4.7px;
+}
+
+.current-video__details__title {
+            font-weight: bold;
+        }
+
+@media (max-width: 991px) {
+
+  .current-video__details__title {
+    text-align: center;
+  }
+}
+
+@media (max-width: 991px) {
+
+  .current-video__details {
+    border-radius: 0;
+  }
 }
