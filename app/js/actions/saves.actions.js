@@ -16,6 +16,9 @@ export async function initSaveList () {
     }
 }
 
+const item = id => 'saves_' + id
+const save = item => ['saves_' + item.id, item]
+
 /*
     I know yielding and using the call effect is unneccessary for localStorage,
     but as this is being done for practicing with sagas, I'll pretend like 'store'
@@ -29,7 +32,7 @@ export function* fetchVideos () {
             videos = []
             
         for (let id of videoIds) {
-            const v = yield call(store.get, id)
+            const v = yield call(store.get, item(id))
             videos.push(v)
         }
 
@@ -58,8 +61,8 @@ export function* toggleVideoSaveStatus (video) {
 
 function* addVideo (saves, video) {
     try {
-        yield call(store.set, LIST_KEY, [...saves, video.id], true)
-        yield call(store.set, video.id, video)
+        yield call(store.update, LIST_KEY, [...saves, video.id])
+        yield call(store.set, ...save(video))
 
         yield put({ type: types.ADD_SAVE, video })
         
@@ -75,12 +78,12 @@ function* removeVideo (saves, id) {
             saves = yield call(store.get, LIST_KEY),
             index = saves.indexOf(id)
 
-        if (index === -1) throw Error('Specified id does not refer to any saved video')
+        if (index === -1) throw Error(`Specified id "${id}" does not refer to any saved video`)
 
         const newList = [...saves.slice(0, index), ...saves.slice(index + 1)]
 
-        yield call(store.set, LIST_KEY, newList, true)
-        yield call(store.del, id)
+        yield call(store.update, LIST_KEY, newList)
+        yield call(store.del, item(id))
 
         yield put({ type: types.REMOVE_SAVE, index })
         

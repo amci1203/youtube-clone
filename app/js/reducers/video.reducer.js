@@ -1,12 +1,14 @@
 import types from '../types'
 
-export default (state = null, action) => {
-    const { type, video, error } = action
+export default (state = { open: false }, action) => {
+    const { type, details, open = false, error } = action
 
     switch (type) {
-        case types.SET_CURRENT_VIDEO_SUCCEEDED:
-            return video
-        case types.SET_CURRENT_VIDEO_FAILED:
+        case types.FETCH_CURRENT_VIDEO_SUCCEEDED:
+        case types.ADD_VIDEO_TO_HISTORY_SUCCEEDED:
+            return { details, open }
+        case types.FETCH_CURRENT_VIDEO_FAILED:
+        case types.ADD_VIDEO_TO_HISTORY_FAILED:
             return { error }
         default:
             return state

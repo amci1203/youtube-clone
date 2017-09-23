@@ -51,13 +51,17 @@ class VideoList extends Component {
                 key: video.id,
                 isSaved,
                 toggleSaveState: () => request('TOGGLE_SAVE', video),
-                setActiveVideo: () => request('SET_CURRENT_VIDEO', video)
+                setActiveVideo: () => request('ADD_VIDEO_TO_HISTORY', video)
             }
             return <Item { ...props } />
         })
 
+        let cls = 'video-list'
+        if (window.location.pathname.includes('/watch/'))
+            cls = cls + ` ${cls}--aside`
+
         return (
-            <section className='video-list'>
+            <section className={ cls }>
                 <ListSection
                     heading={ `Results for "${search.term}"` }
                     videos={ search.results } 

@@ -30,7 +30,7 @@ export default {
     ...formActionTypes('FETCH_SAVES'),
     ...formActionTypes('TOGGLE_SAVE'),
     ...formActionTypes('FETCH_CURRENT_VIDEO'),
-    ...formActionTypes('SET_CURRENT_VIDEO'),
+    ...formActionTypes('ADD_VIDEO_TO_HISTORY'),
     ...formCustomActionTypes('ADD_SAVE', 'REMOVE_SAVE')
     
 }

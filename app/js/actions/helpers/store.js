@@ -23,7 +23,9 @@ export default (function () {
             if (!overwrite && exists(key)) reject(noOverwriteErrMsg(key))
             store.setItem(key, JSON.stringify(val))
             resolve(1) // returns an okay like db updates would
-        })
+        }),
 
-    return { del, get, set, exists: pExists }
+        update = (key, val) => set(key, val, true)
+
+    return { del, get, set, update, exists: pExists }
 })()

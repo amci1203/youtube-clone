@@ -2315,7 +2315,7 @@ const formActionTypes = (type, keepBase = false) => {
 // creates an object of custom types to spread onto exported object
 const formCustomActionTypes = (...types) => types.reduce((obj, type) => Object.assign(obj, { [type]: type }), {});
 
-/* harmony default export */ __webpack_exports__["a"] = (_extends({}, formActionTypes('FETCH_LAST_SEARCH_RESULTS'), formActionTypes('SEARCH'), formActionTypes('FETCH_SAVES'), formActionTypes('TOGGLE_SAVE'), formActionTypes('FETCH_CURRENT_VIDEO'), formActionTypes('SET_CURRENT_VIDEO'), formCustomActionTypes('ADD_SAVE', 'REMOVE_SAVE')));
+/* harmony default export */ __webpack_exports__["a"] = (_extends({}, formActionTypes('FETCH_LAST_SEARCH_RESULTS'), formActionTypes('SEARCH'), formActionTypes('FETCH_SAVES'), formActionTypes('TOGGLE_SAVE'), formActionTypes('FETCH_CURRENT_VIDEO'), formActionTypes('ADD_VIDEO_TO_HISTORY'), formCustomActionTypes('ADD_SAVE', 'REMOVE_SAVE')));
 
 /***/ }),
 /* 19 */
@@ -9089,9 +9089,10 @@ function fsmIterator(fsm, q0) {
         if (!overwrite && exists(key)) reject(noOverwriteErrMsg(key));
         store.setItem(key, JSON.stringify(val));
         resolve(1); // returns an okay like db updates would
-    });
+    }),
+          update = (key, val) => set(key, val, true);
 
-    return { del, get, set, exists: pExists };
+    return { del, get, set, update, exists: pExists };
 })());
 
 /***/ }),
@@ -32077,13 +32078,15 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__types__ = __webpack_require__(18);
 
 
-/* harmony default export */ __webpack_exports__["a"] = ((state = null, action) => {
-    const { type, video, error } = action;
+/* harmony default export */ __webpack_exports__["a"] = ((state = { open: false }, action) => {
+    const { type, details, open = false, error } = action;
 
     switch (type) {
-        case __WEBPACK_IMPORTED_MODULE_0__types__["a" /* default */].SET_CURRENT_VIDEO_SUCCEEDED:
-            return video;
-        case __WEBPACK_IMPORTED_MODULE_0__types__["a" /* default */].SET_CURRENT_VIDEO_FAILED:
+        case __WEBPACK_IMPORTED_MODULE_0__types__["a" /* default */].FETCH_CURRENT_VIDEO_SUCCEEDED:
+        case __WEBPACK_IMPORTED_MODULE_0__types__["a" /* default */].ADD_VIDEO_TO_HISTORY_SUCCEEDED:
+            return { details, open };
+        case __WEBPACK_IMPORTED_MODULE_0__types__["a" /* default */].FETCH_CURRENT_VIDEO_FAILED:
+        case __WEBPACK_IMPORTED_MODULE_0__types__["a" /* default */].ADD_VIDEO_TO_HISTORY_FAILED:
             return { error };
         default:
             return state;
@@ -32113,6 +32116,7 @@ const on = (dispatch, fn) => {
         if (!dispatch) throw Error(errMsg);
     } catch (e) {
         console.error(e);
+        return {};
     }
 
     return Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["c" /* takeLatest */])(dispatch, ({ args }) => args ? fn(...args) : fn());
@@ -32121,13 +32125,14 @@ const on = (dispatch, fn) => {
 /* harmony default export */ __webpack_exports__["a"] = (function* () {
     yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_3__actions_saves_actions__["b" /* initSaveList */]);
     yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__actions_search_actions__["b" /* initSearchList */]);
+    yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_4__actions_video_actions__["b" /* initHistoryList */]);
 
     yield on(__WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].SEARCH_REQUESTED, __WEBPACK_IMPORTED_MODULE_2__actions_search_actions__["c" /* searchYouTube */]);
     yield on(__WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].FETCH_LAST_SEARCH_RESULTS_REQUESTED, __WEBPACK_IMPORTED_MODULE_2__actions_search_actions__["a" /* fetchLastSearchResults */]);
     yield on(__WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].FETCH_SAVES_REQUESTED, __WEBPACK_IMPORTED_MODULE_3__actions_saves_actions__["a" /* fetchVideos */]);
     yield on(__WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].TOGGLE_SAVE_REQUESTED, __WEBPACK_IMPORTED_MODULE_3__actions_saves_actions__["c" /* toggleVideoSaveStatus */]);
     yield on(__WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].FETCH_CURRENT_VIDEO_REQUESTED, __WEBPACK_IMPORTED_MODULE_4__actions_video_actions__["a" /* fetchCurrentVideo */]);
-    yield on(__WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].SET_CURRENT_VIDEO_REQUESTED, __WEBPACK_IMPORTED_MODULE_4__actions_video_actions__["b" /* setCurrentVideo */]);
+    yield on(__WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].ADD_VIDEO_TO_HISTORY_REQUESTED, __WEBPACK_IMPORTED_MODULE_4__actions_video_actions__["c" /* pushVideoToHistory */]);
 });
 
 /***/ }),
@@ -32714,6 +32719,9 @@ let initSaveList = (() => {
     };
 })();
 
+const item = id => 'saves_' + id;
+const save = item => ['saves_' + item.id, item];
+
 /*
     I know yielding and using the call effect is unneccessary for localStorage,
     but as this is being done for practicing with sagas, I'll pretend like 'store'
@@ -32726,7 +32734,7 @@ function* fetchVideos() {
               videos = [];
 
         for (let id of videoIds) {
-            const v = yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].get, id);
+            const v = yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].get, item(id));
             videos.push(v);
         }
 
@@ -32751,8 +32759,8 @@ function* toggleVideoSaveStatus(video) {
 
 function* addVideo(saves, video) {
     try {
-        yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].set, LIST_KEY, [...saves, video.id], true);
-        yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].set, video.id, video);
+        yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].update, LIST_KEY, [...saves, video.id]);
+        yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].set, ...save(video));
 
         yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["b" /* put */])({ type: __WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].ADD_SAVE, video });
     } catch (e) {
@@ -32766,12 +32774,12 @@ function* removeVideo(saves, id) {
         const saves = yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].get, LIST_KEY),
               index = saves.indexOf(id);
 
-        if (index === -1) throw Error('Specified id does not refer to any saved video');
+        if (index === -1) throw Error(`Specified id "${id}" does not refer to any saved video`);
 
         const newList = [...saves.slice(0, index), ...saves.slice(index + 1)];
 
-        yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].set, LIST_KEY, newList, true);
-        yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].del, id);
+        yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].update, LIST_KEY, newList);
+        yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].del, item(id));
 
         yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["b" /* put */])({ type: __WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].REMOVE_SAVE, index });
     } catch (e) {
@@ -32785,15 +32793,40 @@ function* removeVideo(saves, id) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return initHistoryList; });
+/* harmony export (immutable) */ __webpack_exports__["a"] = fetchCurrentVideo;
+/* harmony export (immutable) */ __webpack_exports__["c"] = pushVideoToHistory;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__ = __webpack_require__(35);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__types__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__helpers_store__ = __webpack_require__(76);
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 
 
 
 
-const VIDEO_KEY = 'current_video';
+
+const LIST_KEY = 'history';
+const HISTORY_LIMIT = 50;
+
+const item = id => 'history_' + id;
+const save = item => ['history_' + item.id, item];
+
+let initHistoryList = (() => {
+    var _ref = _asyncToGenerator(function* () {
+        const exists = yield __WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].exists(LIST_KEY);
+        if (!exists) {
+            yield __WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].set(LIST_KEY, []);
+            console.log('history list initialized');
+        } else {
+            console.log('history list already initialized');
+        }
+    });
+
+    return function initHistoryList() {
+        return _ref.apply(this, arguments);
+    };
+})();
 
 /*
     I know yielding and using the call effect is unneccessary for localStorage,
@@ -32801,30 +32834,47 @@ const VIDEO_KEY = 'current_video';
     is a connected database that functions asynchronously
 */
 
-function* currentVideo(v) {
+function* fetchCurrentVideo(id) {
     try {
-        let video;
-        if (v) {
-            video = v;
-            yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].set, VIDEO_KEY, video, true);
-            yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["b" /* put */])({ type: __WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].SET_CURRENT_VIDEO_SUCCEEDED, video });
-        } else {
-            video = yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].get, VIDEO_KEY);
-            yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["b" /* put */])({ type: __WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].FETCH_CURRENT_VIDEO_SUCCEEDED, video });
-        }
+        const history = yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].get, LIST_KEY),
+              details = yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].get, item(id));
+        yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["b" /* put */])({ type: __WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].FETCH_CURRENT_VIDEO_SUCCEEDED, details, open: true });
     } catch (e) {
-        const type = v ? __WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].SET_CURRENT_VIDEO_FAILED : __WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].FETCH_CURRENT_VIDEO_FAILED;
-        yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["b" /* put */])({ type, error: e.toString() });
+        yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["b" /* put */])({
+            type: __WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].FETCH_CURRENT_VIDEO_FAILED,
+            error: e.toString()
+        });
     }
 }
 
-// for sanity's sake; can differentiate between intentions this way
-const setCurrentVideo = video => currentVideo(video);
-/* harmony export (immutable) */ __webpack_exports__["b"] = setCurrentVideo;
+function* pushVideoToHistory(v) {
+    try {
+        const details = (({ id, description, title }) => ({ id, description, title }))(v),
+              history = yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].get, LIST_KEY),
+              index = history.indexOf(details.id);
 
-const fetchCurrentVideo = () => currentVideo();
-/* harmony export (immutable) */ __webpack_exports__["a"] = fetchCurrentVideo;
+        if (index === -1) {
+            history.push(details.id);
+            if (history.length > HISTORY_LIMIT) {
+                yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].del, item(history[0].id));
+            }
+            yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].update, LIST_KEY,
+            // history holds last 50 entries
+            history.length > HISTORY_LIMIT ? history.slice(1) : history);
+            yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].set, ...save(details));
+        } else {
+            const newHistory = [...history.slice(0, index), ...history.slice(index + 1), history[index]];
+            yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["a" /* call */])(__WEBPACK_IMPORTED_MODULE_2__helpers_store__["a" /* default */].update, LIST_KEY, newHistory);
+        }
 
+        yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["b" /* put */])({ type: __WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].ADD_VIDEO_TO_HISTORY_SUCCEEDED, details, open: true });
+    } catch (e) {
+        yield Object(__WEBPACK_IMPORTED_MODULE_0_redux_saga_effects__["b" /* put */])({
+            type: __WEBPACK_IMPORTED_MODULE_1__types__["a" /* default */].ADD_VIDEO_TO_HISTORY_FAILED,
+            error: e.toString()
+        });
+    }
+}
 
 /***/ }),
 /* 314 */
@@ -32914,8 +32964,28 @@ class Video extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
     constructor(...args) {
         var _temp;
 
-        return _temp = super(...args), this.componentDidMount = () => this.fixVideoHeight(), this.componentDidUpdate = () => this.calc(), this.componentWillUnmount = () => window.removeEventListener('resize', this.calculateVideoHeight), _temp;
+        return _temp = super(...args), this.checkUrl = () => {
+            const { request, video, match } = this.props;
+            // console.log(`${video.details.id}, ${match.params.id}`)
+            if (video.details && match.params.id !== video.details.id) {
+                request('FETCH_CURRENT_VIDEO', match.params.id);
+            }
+        }, this.componentWillMount = () => setTimeout(() => {
+            const { request, match } = this.props;
+            request('FETCH_CURRENT_VIDEO', match.params.id);
+        }, 200), this.componentDidMount = () => {
+            this.fixVideoHeight();
+            setInterval(this.checkUrl, 1500);
+        }, this.componentDidUpdate = () => this.calc(), this.componentWillUnmount = () => {
+            window.removeEventListener('resize', this.calculateVideoHeight);
+            this.clearInterval(this.checkUrl);
+        }, _temp;
     }
+
+    // since there's no native events for push/replace state
+    // I'll just check if the URL is different from the id param periodically
+    // Pretty damn hacky, and it's easy to tell; I tried
+
 
     fixVideoHeight() {
         this.calc = () => {
@@ -32942,16 +33012,14 @@ class Video extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
     render() {
         const { match, video } = this.props;
 
-        if (!video) return null;
+        if (!video.open) return null;
         if (video.error) return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'h1',
             null,
             'ERROR'
         );
 
-        console.log(video);
-
-        const { title, description } = video;
+        const { title, description } = video.details;
 
         return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'div',
@@ -32985,13 +33053,15 @@ class Video extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
 
 Video.propTypes = {
     video: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.shape({
-        id: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.string,
-        title: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.string,
-        description: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.string
+        details: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.shape({
+            id: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.string,
+            title: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.string,
+            description: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.string
+        }),
+        open: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.bool
     }),
     match: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.object,
-    request: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.func
-};
+    request: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.func };
 /* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_3__helpers_connect__["a" /* default */])(Video, 'video', { request: __WEBPACK_IMPORTED_MODULE_4__actions_request_actions__["a" /* default */] }));
 
 /***/ }),
@@ -33549,14 +33619,17 @@ class VideoList extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
                 key: video.id,
                 isSaved,
                 toggleSaveState: () => request('TOGGLE_SAVE', video),
-                setActiveVideo: () => request('SET_CURRENT_VIDEO', video)
+                setActiveVideo: () => request('ADD_VIDEO_TO_HISTORY', video)
             });
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__video_list_item__["a" /* default */], props);
         });
 
+        let cls = 'video-list';
+        if (window.location.pathname.includes('/watch/')) cls = cls + ` ${cls}--aside`;
+
         return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'section',
-            { className: 'video-list' },
+            { className: cls },
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(ListSection, {
                 heading: `Results for "${search.term}"`,
                 videos: search.results
@@ -33631,6 +33704,10 @@ function ListItem({ title, id, description, thumbnails, isSaved, toggleSaveState
         children
     );
 
+    const titleLimit = 32;
+    let _title = title;
+    if (videoActive && title.length > titleLimit) _title = title.substring(0, titleLimit) + '...';
+
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
         { className: cls },
@@ -33645,11 +33722,7 @@ function ListItem({ title, id, description, thumbnails, isSaved, toggleSaveState
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 VidLink,
                 { className: 'media__body__title' },
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    'p',
-                    null,
-                    title
-                )
+                _title
             ),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'p',

@@ -9,17 +9,42 @@ import types   from '../types'
 class Video extends Component {
     static propTypes = {
         video: PropTypes.shape({
-            id          : PropTypes.string,
-            title       : PropTypes.string,
-            description : PropTypes.string
+            details: PropTypes.shape({
+                id          : PropTypes.string,
+                title       : PropTypes.string,
+                description : PropTypes.string
+            }),
+            open: PropTypes.bool
         }),
         match: PropTypes.object,
         request: PropTypes.func
     }
     
-    componentDidMount    = () => this.fixVideoHeight()
+    // since there's no native events for push/replace state
+    // I'll just check if the URL is different from the id param periodically
+    // Pretty damn hacky, and it's easy to tell; I tried
+    checkUrl = () => {
+        const { request, video, match } = this.props
+        // console.log(`${video.details.id}, ${match.params.id}`)
+        if ( video.details && (match.params.id !== video.details.id) ) {
+            request('FETCH_CURRENT_VIDEO', match.params.id)
+        }
+    }
+    
+    componentWillMount = () => setTimeout(() => {
+        const { request, match } = this.props
+        request('FETCH_CURRENT_VIDEO', match.params.id)
+    }, 200)
+
+    componentDidMount    = () => {
+        this.fixVideoHeight()
+        setInterval(this.checkUrl, 1500)
+    }
     componentDidUpdate   = () => this.calc()
-    componentWillUnmount = () => window.removeEventListener('resize', this.calculateVideoHeight)
+    componentWillUnmount = () => {
+        window.removeEventListener('resize', this.calculateVideoHeight)
+        this.clearInterval(this.checkUrl)
+    }
 
     fixVideoHeight () {
         this.calc = () => {
@@ -50,14 +75,12 @@ class Video extends Component {
         const
             { match, video } = this.props
 
-        if (!video)
+        if (!video.open)
             return null
         if (video.error)
             return (<h1>ERROR</h1>)
 
-        console.log(video)
-
-        const { title, description } = video
+        const { title, description } = video.details
         
         return (
             <div controls id='current-video-container' className='current-video'>

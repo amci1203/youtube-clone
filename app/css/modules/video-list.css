@@ -5,6 +5,12 @@
     flex-basis: 33.33%;
     flex-grow: 1;
 
+    &--aside {
+        overflow-y: scroll;
+        max-height: 90vh;
+        margin-right: -25px;
+    }
+
     &--placeholder {
         font-weight: 100;
         font-size: 1.5rem;
@@ -12,10 +18,16 @@
         align-self: center;
     }
 
-
     @mixin isSmall {
         flex-basis: 100% !important;
         padding: 0;
+    }
+
+    &__section {
+        &__heading {
+            font-size: 1.15rem;
+            text-align: center;
+        }
     }
 
     &__item {
@@ -36,9 +48,25 @@
             border-radius: 0;
             padding-bottom: 0.35rem;
             border-bottom: 3px solid color($background b(+ 15));
+        }
 
-            .media__body {
+        &--aside .media {
+            &__thumbnail {
+                flex-basis: 20%;
+                padding: 0.15rem;
+                padding-right: 1rem;
+            }
+            &__body {
                 color: #FFF !important;
+                flex-basis: 80%;
+                &__title {
+                    @mixin atMedium {
+                        font-size: 1.1rem;
+                    }
+                }
+                &__description {
+                    display: none;
+                }
             }
         }
     }
@@ -113,26 +141,6 @@
             flex-direction: column;
             &__thumbnail {
                 padding: 0 0.15rem;
-            }
-        }
-    }
-
-
-    &__item--aside .media {
-        &__thumbnail {
-            flex-basis: 20%;
-            padding: 0.15rem;
-            padding-right: 1rem;
-        }
-        &__body {
-            flex-basis: 80%;
-            &__title {
-                @mixin atMedium {
-                    font-size: 1.1rem;
-                }
-            }
-            &__description {
-                display: none;
             }
         }
     }

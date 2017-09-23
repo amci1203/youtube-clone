@@ -30,12 +30,17 @@ export default function ListItem ({ title, id, description, thumbnails, isSaved,
             onClick={ setActiveVideo }
         >{ children }</Link>
     )
+
+    const titleLimit = 32
+    let _title = title
+    if (videoActive && title.length > titleLimit)
+        _title = title.substring(0, titleLimit) + '...'
     
     return (
         <div className={ cls }>
             <VidLink className='media__thumbnail'><img src= { thumbnail } /></VidLink>
             <div className='media__body'>
-                <VidLink className='media__body__title'><p>{ title }</p></VidLink>
+                <VidLink className='media__body__title'>{ _title }</VidLink>
                 <p className='media__body__description'>{ description }</p>
                 <div className='media__body__save-button'>
                     { savedSpan }
